@@ -1,0 +1,230 @@
+{
+  "id": "cf222aff-1228-446a-b3a5-ae6ef3ea51b2",
+  "version": "2.0",
+  "name": "DrupalCampManila2020",
+  "url": "https://dev-ps-loadtest-dummy.pantheonsite.io",
+  "tests": [{
+    "id": "90ea557c-9ed9-4853-bc56-b3ae4800e8be",
+    "name": "click-recipe",
+    "commands": [{
+      "id": "bebc1e76-33c1-43b4-b976-e715c022f0ae",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d3e5e691-df77-405a-b492-76ffabd51c27",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1680x978",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ebdc9696-40b9-40c5-a30c-3df87d13f27a",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log in",
+      "targets": [
+        ["linkText=Log in", "linkText"],
+        ["css=.menu-account__link", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in')]", "xpath:link"],
+        ["xpath=//nav[@id='block-umami-account-menu']/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/en/user/login')]", "xpath:href"],
+        ["xpath=//nav/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8c9ed595-782f-43f0-b1f9-0e122a16e2bb",
+      "comment": "",
+      "command": "waitForElementEditable",
+      "target": "id=edit-name",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "6a5d360e-19b3-4813-9d55-2c8c96d57bf8",
+      "comment": "",
+      "command": "type",
+      "target": "id=edit-name",
+      "targets": [
+        ["id=edit-name", "id"],
+        ["name=name", "name"],
+        ["css=#edit-name", "css:finder"],
+        ["xpath=//input[@id='edit-name']", "xpath:attributes"],
+        ["xpath=//form[@id='user-login-form']/div/input", "xpath:idRelative"],
+        ["xpath=//main/div/div/div/form/div/input", "xpath:position"]
+      ],
+      "value": "umami"
+    }, {
+      "id": "c74e3027-b6cc-4ffd-af2b-b4a1fedc9168",
+      "comment": "",
+      "command": "type",
+      "target": "id=edit-pass",
+      "targets": [
+        ["id=edit-pass", "id"],
+        ["name=pass", "name"],
+        ["css=#edit-pass", "css:finder"],
+        ["xpath=//input[@id='edit-pass']", "xpath:attributes"],
+        ["xpath=//form[@id='user-login-form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//main/div/div/div/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "umami"
+    }, {
+      "id": "eb2e4e23-c27c-466f-bf97-f9d44e70116b",
+      "comment": "",
+      "command": "click",
+      "target": "name=op",
+      "targets": [
+        ["name=op", "name"],
+        ["css=#user-login-form #edit-submit", "css:finder"],
+        ["xpath=(//input[@id='edit-submit'])[2]", "xpath:attributes"],
+        ["xpath=(//div[@id='edit-actions']/input)[2]", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "11db8400-3673-40e1-a799-302d5f251c6e",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Home",
+      "targets": [
+        ["linkText=Home", "linkText"],
+        ["css=.menu-main__item:nth-child(1) > .menu-main__link", "css:finder"],
+        ["xpath=//a[contains(text(),'Home')]", "xpath:link"],
+        ["xpath=//nav[@id='block-umami-main-menu']/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/en')])[59]", "xpath:href"],
+        ["xpath=//div[2]/nav/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Home')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "01ad4edc-bd55-4c94-8d25-e9d68e4b30ea",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=View recipe",
+      "targets": [
+        ["linkText=View recipe", "linkText"],
+        ["css=.field:nth-child(3) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'View recipe')]", "xpath:link"],
+        ["xpath=//div[@id='block-umami-banner-home']/div/div[3]/div[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/en/recipes/super-easy-vegetarian-pasta-bake')]", "xpath:href"],
+        ["xpath=//div[3]/div[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'View recipe')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8b2afa05-5d77-43bf-bd7e-71346436bf13",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Edit",
+      "targets": [
+        ["linkText=Edit", "linkText"],
+        ["css=.tab:nth-child(2) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Edit')])[5]", "xpath:link"],
+        ["xpath=//div[@id='block-umami-local-tasks']/nav/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/en/node/3/edit')]", "xpath:href"],
+        ["xpath=//div/div/div/nav/ul/li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a70908a5-203a-4eac-bcf0-da8a408561e8",
+      "comment": "",
+      "command": "click",
+      "target": "id=edit-title-0-value",
+      "targets": [
+        ["id=edit-title-0-value", "id"],
+        ["name=title[0][value]", "name"],
+        ["css=#edit-title-0-value", "css:finder"],
+        ["xpath=//input[@id='edit-title-0-value']", "xpath:attributes"],
+        ["xpath=//div[@id='edit-title-wrapper']/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "58f0faa9-3f43-43da-adda-d48eab22e370",
+      "comment": "",
+      "command": "type",
+      "target": "id=edit-title-0-value",
+      "targets": [
+        ["id=edit-title-0-value", "id"],
+        ["name=title[0][value]", "name"],
+        ["css=#edit-title-0-value", "css:finder"],
+        ["xpath=//input[@id='edit-title-0-value']", "xpath:attributes"],
+        ["xpath=//div[@id='edit-title-wrapper']/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/input", "xpath:position"]
+      ],
+      "value": "Super easy vegetarian pasta bake and more"
+    }, {
+      "id": "e67ca3ee-bf4b-4a55-808a-81a0d2ae8fd1",
+      "comment": "",
+      "command": "click",
+      "target": "css=.js-form-item-field-recipe-category-target-id",
+      "targets": [
+        ["css=.js-form-item-field-recipe-category-target-id", "css:finder"],
+        ["xpath=//div[@id='edit-field-recipe-category-wrapper']/div", "xpath:idRelative"],
+        ["xpath=//div/div[7]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e3ce2264-d213-45e1-900e-f79c1ea0b706",
+      "comment": "",
+      "command": "click",
+      "target": "id=edit-submit",
+      "targets": [
+        ["id=edit-submit", "id"],
+        ["name=op", "name"],
+        ["css=#edit-submit", "css:finder"],
+        ["xpath=//input[@id='edit-submit']", "xpath:attributes"],
+        ["xpath=//div[@id='edit-actions']/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ff0004be-790a-43bc-ae7f-58a906b142f7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.menu-main",
+      "targets": [
+        ["css=.menu-main", "css:finder"],
+        ["xpath=//nav[@id='block-umami-main-menu']/ul", "xpath:idRelative"],
+        ["xpath=//div[2]/nav/ul", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "72bc8349-ce23-409d-a224-b86bc9e5fc70",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.site-logo > img",
+      "targets": [
+        ["css=.site-logo > img", "css:finder"],
+        ["xpath=//img[@alt='Home']", "xpath:img"],
+        ["xpath=//div[@id='block-umami-branding']/a/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3dde945e-aee8-4589-8daf-acf55ba30cc6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.site-logo > img",
+      "targets": [
+        ["css=.site-logo > img", "css:finder"],
+        ["xpath=//img[@alt='Home']", "xpath:img"],
+        ["xpath=//div[@id='block-umami-branding']/a/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "1e8ac31c-4418-4174-b3a3-654b8f12f034",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["90ea557c-9ed9-4853-bc56-b3ae4800e8be"]
+  }],
+  "urls": ["https://dev-ps-loadtest-dummy.pantheonsite.io/"],
+  "plugins": []
+}

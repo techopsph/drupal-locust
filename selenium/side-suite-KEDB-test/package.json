@@ -1,0 +1,31 @@
+{
+  "name": "KEDB-test",
+  "version": "0.0.0",
+  "jest": {
+    "extraGlobals": [],
+    "modulePaths": [
+      "/Users/eabquina/.nvm/versions/node/v8.11.2/lib/node_modules/selenium-side-runner/node_modules",
+      "/Users/eabquina/.nvm/versions/node/v8.11.2/lib/node_modules"
+    ],
+    "setupFilesAfterEnv": [
+      "/Users/eabquina/.nvm/versions/node/v8.11.2/lib/node_modules/selenium-side-runner/node_modules/jest-environment-selenium/dist/setup.js"
+    ],
+    "testEnvironment": "jest-environment-selenium",
+    "testEnvironmentOptions": {
+      "capabilities": {
+        "goog:chromeOptions": {
+          "args": [
+            "--headless",
+            "--nogpu"
+          ]
+        },
+        "browserName": "chrome"
+      },
+      "params": {},
+      "runId": "ec098016ab89d5e8ae9a347aeb68800e",
+      "path": "/Users/eabquina/.nvm/versions/node/v8.11.2/lib/node_modules/",
+      "timeout": 15000
+    }
+  },
+  "dependencies": {}
+}

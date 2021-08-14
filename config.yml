@@ -1,0 +1,106 @@
+  title: drupal-camp-cebu-2018
+  type: Anonymous
+  domain: dev-ps-loadtest-dummy.pantheonsite.io
+  url: 'https://dev-ps-loadtest-dummy.pantheonsite.io'
+  site_name: proupnetic
+  org_name: 'Tarkenton Enteprises'
+  site_uuid: 5efcbe5e-b8b9-429d-bd1f-2e552b3f646a
+  org_uuid: 1a641984-ee63-44d0-9dfb-74fb5bfcabad
+  date: '20191029'
+  performed_by: eladio@getpantheon.com
+  number_of_slaves: '20'
+  concurrent_users: '120'
+  runtime: '60'
+  hatchrate: '0.50'
+  branch_name: lt-proupnetic
+  region: us-west1
+  status: published
+  daily_average_traffic: '1573'
+  random: '1'
+  random_ratio: '10'
+  slowest_page: /group-management
+  anonymous_ratio:
+    - '11'
+  peak_traffic:
+    -
+      peak_page_views: '110256'
+      peak_period: '2019-10-29T00:00:00'
+      peak_sessions: '7392'
+      peak_time_frame: Day
+      peak_users: '4809'
+    -
+      peak_page_views: '8808'
+      peak_period: '2019-10-29T00:00:00 - 2019-10-29T12:00:00'
+      peak_sessions: '584'
+      peak_time_frame: Hour
+      peak_users: '891'
+  top_visited:
+    -
+      longest_response_time: '1'
+      ratio: '40'
+      url_path: /courses/new-york-state-sexual-harassment-prevention-training/
+      view_count: '40'
+    -
+      longest_response_time: '1'
+      ratio: '30'
+      url_path: /my-courses/
+      view_count: '30'
+    -
+      longest_response_time: '1'
+      ratio: '10'
+      url_path: /group-management/
+      view_count: '10'
+    -
+      longest_response_time: '1'
+      ratio: '10'
+      url_path: /employee-registration/
+      view_count: '10'
+    -
+      longest_response_time: '1'
+      ratio: '10'
+      url_path: /
+      view_count: '10'
+  custom_sequences:
+    -
+      name: quiz_5
+      ratio: '15'
+      request_name: what-should-i-do-if-i-am-harassed-quiz
+      steps:
+        -
+          path: /
+          type: get
+        -
+          data: '{&quot;name&quot;:&quot;ebevens@tarkenton.com&quot;, &quot;pass&quot;:&quot;ProUser@10&quot;, &quot;form_id&quot;: &quot;loginform&quot;, &quot;op&quot;: &quot;Log In&quot;}'
+          path: /wp-login.php
+          type: post
+        -
+          path: /quizzes/what-should-i-do-if-i-am-harassed-quiz/
+          type: get
+        -
+          data: '{&quot;question_86_355&quot;:&quot;2&quot;, &quot;question_86_356&quot;:&quot;2&quot;, &quot;question_86_357&quot;:&quot;2&quot;,  &quot;form_id&quot;: &quot;loginform&quot;, &quot;op&quot;: &quot;Finish Quiz&quot;}'
+          path: /quizzes/what-should-i-do-if-i-am-harassed-quiz/
+          type: post
+  pytest_flag: true
+  pytest_class: TestKedbLoginsearch
+  pytest_codes:
+    -
+      lines:
+        - 'self.driver.get(&quot;http://dev-kedb-d7.pantheonsite.io/&quot;)'
+        - 'self.driver.find_element(By.ID, &quot;edit-name&quot;).click()'
+        - 'self.driver.find_element(By.ID, &quot;edit-name&quot;).send_keys(&quot;eladio@getpantheon.com&quot;)'
+        - 'self.driver.find_element(By.ID, &quot;edit-pass&quot;).send_keys(&quot;[Pantheon]1234&quot;)'
+        - 'self.driver.find_element(By.ID, &quot;edit-submit&quot;).click()'
+        - 'self.driver.find_element(By.ID, &quot;facetapi-link--556&quot;).click()'
+        - 'self.driver.find_element(By.CSS_SELECTOR, &quot;#block-facetapi-qjejqftyhn5j90hmbhoy3t0dllnssrjt &gt; .block-title&quot;).click()'
+        - 'self.driver.find_element(By.LINK_TEXT, &quot;Log out&quot;).click()'
+        - 'self.driver.set_window_size(960, 1008)'
+      name: test_kedbloginsearch
+  pytest_files:
+    -
+      name: login_search
+      path: test_kedbloginsearch.py
+      ratio: '4'
+    -
+      name: login_search_2
+      path: test_kedbloginsearch.py
+      ratio: '10'

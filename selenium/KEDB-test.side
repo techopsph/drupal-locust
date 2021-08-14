@@ -1,0 +1,131 @@
+{
+  "id": "33099946-f252-48fd-a317-bf39a5bc9328",
+  "version": "2.0",
+  "name": "KEDB-test",
+  "url": "http://dev-kedb-d7.pantheonsite.io",
+  "tests": [{
+    "id": "3ab535de-97df-484c-81e6-2b2accb3e804",
+    "name": "kedb-login-search",
+    "commands": [{
+      "id": "19aa27e1-bf24-40d1-ae11-a41ec3dd3488",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f79828c7-a408-4737-8cb1-a07f90c1db2c",
+      "comment": "",
+      "command": "click",
+      "target": "id=edit-name",
+      "targets": [
+        ["id=edit-name", "id"],
+        ["name=name", "name"],
+        ["css=#edit-name", "css:finder"],
+        ["xpath=//input[@id='edit-name']", "xpath:attributes"],
+        ["xpath=//form[@id='user-login-form']/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d116c77e-7876-4dda-b48e-852b3e026e13",
+      "comment": "",
+      "command": "type",
+      "target": "id=edit-name",
+      "targets": [
+        ["id=edit-name", "id"],
+        ["name=name", "name"],
+        ["css=#edit-name", "css:finder"],
+        ["xpath=//input[@id='edit-name']", "xpath:attributes"],
+        ["xpath=//form[@id='user-login-form']/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "eladio@getpantheon.com"
+    }, {
+      "id": "65fff21d-c25c-4b4a-9b66-2467686fd67d",
+      "comment": "",
+      "command": "type",
+      "target": "id=edit-pass",
+      "targets": [
+        ["id=edit-pass", "id"],
+        ["name=pass", "name"],
+        ["css=#edit-pass", "css:finder"],
+        ["xpath=//input[@id='edit-pass']", "xpath:attributes"],
+        ["xpath=//form[@id='user-login-form']/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "[Pantheon]1234"
+    }, {
+      "id": "592a9b27-0acf-457e-9a7b-c4af6890ae16",
+      "comment": "",
+      "command": "click",
+      "target": "id=edit-submit",
+      "targets": [
+        ["id=edit-submit", "id"],
+        ["name=op", "name"],
+        ["css=#edit-submit", "css:finder"],
+        ["xpath=//button[@id='edit-submit']", "xpath:attributes"],
+        ["xpath=//div[@id='edit-actions']/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "60c115e8-129d-4f25-8e8b-ce44340903bf",
+      "comment": "",
+      "command": "click",
+      "target": "id=facetapi-link--556",
+      "targets": [
+        ["id=facetapi-link--556", "id"],
+        ["css=#facetapi-link--556", "css:finder"],
+        ["xpath=//a[@id='facetapi-link--556']", "xpath:attributes"],
+        ["xpath=//ul[@id='facetapi-facet-search-apicontent-block-item-bundle']/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/search/bundle/node%3Aknowledge_entry')]", "xpath:href"],
+        ["xpath=//section/ul/li[5]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8823c9c4-7b50-461b-9ff6-404a8e1083f9",
+      "comment": "",
+      "command": "click",
+      "target": "css=#block-facetapi-qjejqftyhn5j90hmbhoy3t0dllnssrjt > .block-title",
+      "targets": [
+        ["css=#block-facetapi-qjejqftyhn5j90hmbhoy3t0dllnssrjt > .block-title", "css:finder"],
+        ["xpath=//section[@id='block-facetapi-qjejqftyhn5j90hmbhoy3t0dllnssrjt']/h2", "xpath:idRelative"],
+        ["xpath=//section[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'KM Type')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d7644fda-9f7e-417d-a9a9-39eea4a929c4",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log out",
+      "targets": [
+        ["linkText=Log out", "linkText"],
+        ["css=.last:nth-child(2) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Log out')])[2]", "xpath:link"],
+        ["xpath=//div[@id='navbar-collapse']/nav/ul[2]/li[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/user/logout')])[2]", "xpath:href"],
+        ["xpath=//ul[2]/li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e730aa62-d7e5-4439-9c30-203f86467b59",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "960x1008",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "1934ead2-5285-4355-95d7-c06180e3edd8",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["3ab535de-97df-484c-81e6-2b2accb3e804"]
+  }],
+  "urls": ["http://dev-kedb-d7.pantheonsite.io/"],
+  "plugins": []
+}
