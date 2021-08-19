@@ -7,7 +7,7 @@ import json
 import selenium
 from bs4 import BeautifulSoup
 from faker import Faker
-from locust import HttpLocust, TaskSet, task, events, between
+from locust import HttpUser, TaskSet, task, events, between
 from locust.clients import HttpSession
 from pyquery import PyQuery
 from selenium import webdriver
@@ -104,8 +104,13 @@ class TestHomepage():
     # 17 | click | css=.site-logo > img |  | 
     self.driver.find_element(By.CSS_SELECTOR, ".site-logo > img").click()
 
-## Adv.T Custom Scripts, CasperJS, Selenium, PyTest etc
-class AdvancedTaskSet(TaskSet):
+
+## Adv.U Advanced User Setting
+class AdvancedUser(HttpUser):
+    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
+    wait_time = between(1, 10)
+
+    ## Adv.T Custom Scripts, CasperJS, Selenium, PyTest etc
     def login(self):
         # login function using http session handler. Modify for the actual login path
         request_path = "/user/login"
@@ -164,10 +169,3 @@ class AdvancedTaskSet(TaskSet):
             response_time=total_time,
             response_length=0
         )
-
-## Adv.U Advanced User Setting
-class AdvancedUser(HttpLocust):
-    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-    task_set = AdvancedTaskSet
-    wait_time = between(1, 10)
-

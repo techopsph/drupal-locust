@@ -11,7 +11,7 @@ import time
 import pytest
 import json
 import selenium
-from locust import HttpLocust, TaskSet, task, events
+from locust import HttpUser, TaskSet, task, events
 from locust.clients import HttpSession
 from pyquery import PyQuery
 {%- if pytest_flag %}
@@ -116,7 +116,7 @@ class MyTaskSet(TaskSet):
     {% endif %}
 
     
-class MyLocust(HttpLocust):
+class MyLocust(HttpUser):
     host = os.getenv('TARGET_URL', "{{ url }}")
     task_set = MyTaskSet
     min_wait = 1000
