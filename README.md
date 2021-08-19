@@ -3,7 +3,7 @@ A library of code snippets for Locust and Drupal sites
 
 # Installation and Requirements
 ```
-pip install locustio pyzmq pyquery beautifulsoup4 pytest faker selenium Jinja2 j2cli-3 
+pip3 install locust pyzmq pyquery beautifulsoup4 pytest faker selenium Jinja2 j2cli-3 
 
 npm install npm
 npm install -g phantomjs@2.1.7 casperjs@1.1.1
