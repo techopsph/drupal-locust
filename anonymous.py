@@ -7,7 +7,7 @@ import json
 import selenium
 from bs4 import BeautifulSoup
 from faker import Faker
-from locust import HttpLocust, TaskSet, task, events, between
+from locust import HttpUser, TaskSet, task, events, between
 from locust.clients import HttpSession
 from pyquery import PyQuery
 from selenium import webdriver
@@ -52,7 +52,9 @@ def get_random_article(self, source_path, search_class, comment_form_id):
 #############
 
 ## Anon.T Anonymous TaskSet
-class AnonymousTaskSet(TaskSet):
+class AnonymousUser(HttpUser):
+    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
+    wait_time = between(1, 3)
 
     ## Anon.1.0 Random URLs from Homepage
     def anon_index_page(self, path="/"):
@@ -185,8 +187,6 @@ class AnonymousTaskSet(TaskSet):
     
     ## Anon.7.0 End 
 
+
+
 #Anon.U Anonymous User
-class AnonymousUser(HttpLocust):
-    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-    task_set = AnonymousTaskSet
-    wait_time = between(1, 3)

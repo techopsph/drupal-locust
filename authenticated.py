@@ -7,7 +7,7 @@ import json
 import selenium
 from bs4 import BeautifulSoup
 from faker import Faker
-from locust import HttpLocust, TaskSet, task, events, between
+from locust import HttpUser, TaskSet, task, events, between
 from locust.clients import HttpSession
 from pyquery import PyQuery
 from selenium import webdriver
@@ -52,7 +52,10 @@ def get_random_article(self, source_path, search_class, comment_form_id):
 #############
 
 ## Auth.T Authenticated TaskSet
-class AuthenticatedTaskSet(TaskSet):
+class AuthenticatedUser(HttpUser):
+    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
+    wait_time = between(5, 20)
+
     ## Auth.1.0 User Login Form (Drupal 7 and WordPress)
     # @task(1)
     # def login_user(self):
@@ -176,8 +179,3 @@ class AuthenticatedTaskSet(TaskSet):
     ## 5.0 End
 
 #Auth.U Authenticated User
-class AuthenticatedUser(HttpLocust):
-    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-    task_set = AuthenticatedTaskSet
-    wait_time = between(5, 20)
-

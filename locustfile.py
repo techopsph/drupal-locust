@@ -7,7 +7,7 @@ import json
 import selenium
 from bs4 import BeautifulSoup
 from faker import Faker
-from locust import HttpLocust, TaskSet, task, events, between
+from locust import HttpUser, TaskSet, task, events, between
 from locust.clients import HttpSession
 from pyquery import PyQuery
 from selenium import webdriver
@@ -51,9 +51,12 @@ def get_random_article(self, source_path, search_class, comment_form_id):
 
 #############
 
-## Anon.T Anonymous TaskSet
-class AnonymousTaskSet(TaskSet):
+# Anon.U Anonymous User
+class AnonymousUser(HttpUser):
+    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
+    wait_time = between(1, 3)
 
+    ## Anon.T Anonymous TaskSet
     ## Anon.1.0 Random URLs from Homepage
     def anon_index_page(self, path="/"):
         # Using PyQuery, we look for anchor elements from the homepage (or any path) 
@@ -184,16 +187,17 @@ class AnonymousTaskSet(TaskSet):
     ## TODO - actual endpoints functions and helpers
     
     ## Anon.7.0 End 
+    
 
-# Anon.U Anonymous User
-# class AnonymousUser(HttpLocust):
+
+
+
+# Auth.U Authenticated User
+# class AuthenticatedUser(HttpUser):
 #     host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-#     task_set = AnonymousTaskSet
-#     wait_time = between(1, 3)
-
-
-## Auth.T Authenticated TaskSet
-class AuthenticatedTaskSet(TaskSet):
+#     wait_time = between(5, 20)
+    
+    ## Auth.T Authenticated TaskSet
     ## Auth.1.0 User Login Form (Drupal 7 and WordPress)
     # @task(1)
     # def login_user(self):
@@ -202,86 +206,86 @@ class AuthenticatedTaskSet(TaskSet):
     #     self.client.post("/user/login", {"name":"umami", "pass":"umami", "form_id": "user_login", "op": "Log in"})
 
     ## Auth.1.1 User Login Function and Form (Drupal 8)
-    def on_start(self):
-        self.login() # on_start is called when a Locust start before, any task is scheduled
+    # def on_start(self):
+    #     self.login() # on_start is called when a Locust start before, any task is scheduled
 
-    def login(self):
-        # login function using http session handler. Modify for the actual login path
-        request_path = "/user/login"
-        self.client.post(request_path, {
-            "name": "umami",
-            "pass": "umami",
-            "form_id": "user_login_form",
-            "form_build_id": get_form_build_id(self, request_path),
-            "op": "Log in"
-        })
+    # def login(self):
+    #     # login function using http session handler. Modify for the actual login path
+    #     request_path = "/user/login"
+    #     self.client.post(request_path, {
+    #         "name": "umami",
+    #         "pass": "umami",
+    #         "form_id": "user_login_form",
+    #         "form_build_id": get_form_build_id(self, request_path),
+    #         "op": "Log in"
+    #     })
     
-    def on_stop(self):
-        self.client.get("/user/logout")
+    # def on_stop(self):
+    #     self.client.get("/user/logout")
 
-    ## Auth.1.1 User Login then Navigate Site. Add some pages to load.
-    @task(1)
-    def navigate_site_steps(self):
-        self.client.get("/")
-        self.client.get("/user/1/edit")
-        # Add more paths or pages here    
-    ## Auth.1.0 End
+    # ## Auth.1.1 User Login then Navigate Site. Add some pages to load.
+    # @task(1)
+    # def navigate_site_steps(self):
+    #     self.client.get("/")
+    #     self.client.get("/user/1/edit")
+    #     # Add more paths or pages here    
+    # ## Auth.1.0 End
 
-    ## 2.0 Create an Article
-    @task(1)
-    def create_node_article(self):
-        ## TODO
-        # Add "files[field_image_0]": get_lorem_picsum(),
+    # ## 2.0 Create an Article
+    # @task(1)
+    # def create_node_article(self):
+    #     ## TODO
+    #     # Add "files[field_image_0]": get_lorem_picsum(),
         
-        # Create new Faker instance and text
-        fake = Faker() 
-        article_title = fake.format('sentence')
-        article_body = fake.format('text')
-        article_tags = fake.format('word')
-        print(article_title)
-        print(article_body)
-        print(article_tags)
+    #     # Create new Faker instance and text
+    #     fake = Faker() 
+    #     article_title = fake.format('sentence')
+    #     article_body = fake.format('text')
+    #     article_tags = fake.format('word')
+    #     print(article_title)
+    #     print(article_body)
+    #     print(article_tags)
 
-        request_path = "/node/add/article"
-        self.client.post(request_path, {
-            "title[0][value]": article_title,
-            "body[0][value]": article_body,
-            "field_tags[target_id]": article_tags,
-            "langcode[0][value]": "en",
-            "moderation_state[0][state]": "published", ## Depending on the roles and permissions, this might not work
-            "form_id": "node_article_form",
-            "form_token": get_form_token(self, request_path),
-            "form_build_id": get_form_build_id(self, request_path),
-            "op": "Save"
-        })
-    ## 2.0 End
+    #     request_path = "/node/add/article"
+    #     self.client.post(request_path, {
+    #         "title[0][value]": article_title,
+    #         "body[0][value]": article_body,
+    #         "field_tags[target_id]": article_tags,
+    #         "langcode[0][value]": "en",
+    #         "moderation_state[0][state]": "published", ## Depending on the roles and permissions, this might not work
+    #         "form_id": "node_article_form",
+    #         "form_token": get_form_token(self, request_path),
+    #         "form_build_id": get_form_build_id(self, request_path),
+    #         "op": "Save"
+    #     })
+    # ## 2.0 End
 
-    ## 3.0 Adding Comments to Articles
-    # Scenario: Configured to only post as Authenticated
-    # Make sure that BigPipe is turned-off in Drupal 8 
-    # The response content is not complete and unable to be parsed by lxml
-    @task(1)
-    def create_node_article_comment(self):
-        fake = Faker() # Create new Faker instance
+    # ## 3.0 Adding Comments to Articles
+    # # Scenario: Configured to only post as Authenticated
+    # # Make sure that BigPipe is turned-off in Drupal 8 
+    # # The response content is not complete and unable to be parsed by lxml
+    # @task(1)
+    # def create_node_article_comment(self):
+    #     fake = Faker() # Create new Faker instance
         
-        # Find a random article from a page
-        # self, Articles or News page, the "class" for Article Links, and the Comment Form ID for all comments
-        random_comment = get_random_article(self, "/articles", "read-more__link", "comment-form")
-        random_article_path = random_comment["random_article_path"]
-        comment_post_path = random_comment["comment_post_path"]
-        print("Random Article: " + random_article_path)
-        print("Comment Post Path: " + comment_post_path)
+    #     # Find a random article from a page
+    #     # self, Articles or News page, the "class" for Article Links, and the Comment Form ID for all comments
+    #     random_comment = get_random_article(self, "/articles", "read-more__link", "comment-form")
+    #     random_article_path = random_comment["random_article_path"]
+    #     comment_post_path = random_comment["comment_post_path"]
+    #     print("Random Article: " + random_article_path)
+    #     print("Comment Post Path: " + comment_post_path)
         
-        # Post the Comment to the selected 
-        self.client.post(comment_post_path, {
-            "subject[0][value]": fake.sentence(),
-            "comment_body[0][value]": fake.text(),
-            "langcode[0][value]": "en",
-            "form_id": "comment_article_comment_form", ## Change depending on the Content type machine name
-            "form_token": get_form_token(self, random_article_path),
-            "form_build_id": get_form_build_id(self, random_article_path),
-            "op": "Save"
-        })
+    #     # Post the Comment to the selected 
+    #     self.client.post(comment_post_path, {
+    #         "subject[0][value]": fake.sentence(),
+    #         "comment_body[0][value]": fake.text(),
+    #         "langcode[0][value]": "en",
+    #         "form_id": "comment_article_comment_form", ## Change depending on the Content type machine name
+    #         "form_token": get_form_token(self, random_article_path),
+    #         "form_build_id": get_form_build_id(self, random_article_path),
+    #         "op": "Save"
+    #     })
     ## 3.0 End
 
     ## TODO - 4.0 Create an article via JSON:API
@@ -316,131 +320,125 @@ class AuthenticatedTaskSet(TaskSet):
     ## 5.0 Commerce Shopping Cart Steps
     ## 5.0 End
 
-# Auth.U Authenticated User
-# class AuthenticatedUser(HttpLocust):
-#     host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-#     task_set = AuthenticatedTaskSet
-#     wait_time = between(5, 20)
-
-
 
 ## Adv.5.PyTest Code Steps
-class TestHomepage():
-  def setup_method(self, method):
-    ## Important: to add headless argument for the load test
-    #options = webdriver.ChromeOptions() 
-    #options.add_argument('headless')
-    #self.driver = webdriver.Chrome(chrome_options=options)
-    self.driver = webdriver.Chrome()
-    self.vars = {}
+# class TestHomepage():
+#   def setup_method(self, method):
+#     ## Important: to add headless argument for the load test
+#     #options = webdriver.ChromeOptions() 
+#     #options.add_argument('headless')
+#     #self.driver = webdriver.Chrome(chrome_options=options)
+#     self.driver = webdriver.Chrome()
+#     self.vars = {}
   
-  def teardown_method(self, method):
-    self.driver.quit()
+#   def teardown_method(self, method):
+#     self.driver.quit()
   
-  def test_clickrecipe(self):
-    # Test name: click-recipe
-    # Step # | name | target | value | comment
-    # 1 | open | / |  | 
-    self.driver.get("https://dev-ps-loadtest-dummy.pantheonsite.io/")
-    # 2 | setWindowSize | 1680x978 |  | 
-    self.driver.set_window_size(1680, 978)
-    # 3 | click | linkText=Log in |  | 
-    self.driver.find_element(By.LINK_TEXT, "Log in").click()
-    # 4 | waitForElementEditable | id=edit-name | 30000 | 
-    WebDriverWait(self.driver, 30000).until(expected_conditions.element_to_be_clickable((By.ID, "edit-name")))
-    # 5 | type | id=edit-name | umami | 
-    self.driver.find_element(By.ID, "edit-name").send_keys("umami")
-    # 6 | type | id=edit-pass | umami | 
-    self.driver.find_element(By.ID, "edit-pass").send_keys("umami")
-    # 7 | click | name=op |  | 
-    self.driver.find_element(By.NAME, "op").click()
-    # 8 | click | linkText=Home |  | 
-    self.driver.find_element(By.LINK_TEXT, "Home").click()
-    # 9 | click | linkText=View recipe |  | 
-    self.driver.find_element(By.LINK_TEXT, "View recipe").click()
-    # 10 | click | linkText=Edit |  | 
-    self.driver.find_element(By.LINK_TEXT, "Edit").click()
-    # 11 | click | id=edit-title-0-value |  | 
-    self.driver.find_element(By.ID, "edit-title-0-value").click()
-    # 12 | type | id=edit-title-0-value | Super easy vegetarian pasta bake and more | 
-    self.driver.find_element(By.ID, "edit-title-0-value").send_keys("Super easy vegetarian pasta bake and more")
-    # 13 | click | css=.js-form-item-field-recipe-category-target-id |  | 
-    self.driver.find_element(By.CSS_SELECTOR, ".js-form-item-field-recipe-category-target-id").click()
-    # 14 | click | id=edit-submit |  | 
-    self.driver.find_element(By.ID, "edit-submit").click()
-    # 15 | click | css=.menu-main |  | 
-    self.driver.find_element(By.CSS_SELECTOR, ".menu-main").click()
-    # 16 | mouseOver | css=.site-logo > img |  | 
-    element = self.driver.find_element(By.CSS_SELECTOR, ".site-logo > img")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).perform()
-    # 17 | click | css=.site-logo > img |  | 
-    self.driver.find_element(By.CSS_SELECTOR, ".site-logo > img").click()
+#   def test_clickrecipe(self):
+#     # Test name: click-recipe
+#     # Step # | name | target | value | comment
+#     # 1 | open | / |  | 
+#     self.driver.get("https://dev-ps-loadtest-dummy.pantheonsite.io/")
+#     # 2 | setWindowSize | 1680x978 |  | 
+#     self.driver.set_window_size(1680, 978)
+#     # 3 | click | linkText=Log in |  | 
+#     self.driver.find_element(By.LINK_TEXT, "Log in").click()
+#     # 4 | waitForElementEditable | id=edit-name | 30000 | 
+#     WebDriverWait(self.driver, 30000).until(expected_conditions.element_to_be_clickable((By.ID, "edit-name")))
+#     # 5 | type | id=edit-name | umami | 
+#     self.driver.find_element(By.ID, "edit-name").send_keys("umami")
+#     # 6 | type | id=edit-pass | umami | 
+#     self.driver.find_element(By.ID, "edit-pass").send_keys("umami")
+#     # 7 | click | name=op |  | 
+#     self.driver.find_element(By.NAME, "op").click()
+#     # 8 | click | linkText=Home |  | 
+#     self.driver.find_element(By.LINK_TEXT, "Home").click()
+#     # 9 | click | linkText=View recipe |  | 
+#     self.driver.find_element(By.LINK_TEXT, "View recipe").click()
+#     # 10 | click | linkText=Edit |  | 
+#     self.driver.find_element(By.LINK_TEXT, "Edit").click()
+#     # 11 | click | id=edit-title-0-value |  | 
+#     self.driver.find_element(By.ID, "edit-title-0-value").click()
+#     # 12 | type | id=edit-title-0-value | Super easy vegetarian pasta bake and more | 
+#     self.driver.find_element(By.ID, "edit-title-0-value").send_keys("Super easy vegetarian pasta bake and more")
+#     # 13 | click | css=.js-form-item-field-recipe-category-target-id |  | 
+#     self.driver.find_element(By.CSS_SELECTOR, ".js-form-item-field-recipe-category-target-id").click()
+#     # 14 | click | id=edit-submit |  | 
+#     self.driver.find_element(By.ID, "edit-submit").click()
+#     # 15 | click | css=.menu-main |  | 
+#     self.driver.find_element(By.CSS_SELECTOR, ".menu-main").click()
+#     # 16 | mouseOver | css=.site-logo > img |  | 
+#     element = self.driver.find_element(By.CSS_SELECTOR, ".site-logo > img")
+#     actions = ActionChains(self.driver)
+#     actions.move_to_element(element).perform()
+#     # 17 | click | css=.site-logo > img |  | 
+#     self.driver.find_element(By.CSS_SELECTOR, ".site-logo > img").click()
 
-## Adv.T Custom Scripts, CasperJS, Selenium, PyTest etc
-class AdvancedTaskSet(TaskSet):
-    def login(self):
-        # login function using http session handler. Modify for the actual login path
-        request_path = "/user/login"
-        self.client.post(request_path, {
-            "name": "umami",
-            "pass": "umami",
-            "form_id": "user_login_form",
-            "form_build_id": get_form_build_id(self, request_path),
-            "op": "Log in"
-        })
+
+
+## Adv.U Advanced User Setting
+#class AdvancedUser(HttpUser):
+#    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
+
+#    wait_time = between(1, 60)
+
+    ## Adv.T Custom Scripts, CasperJS, Selenium, PyTest etc
+
+    # def login(self):
+    #     # login function using http session handler. Modify for the actual login path
+    #     request_path = "/user/login"
+    #     self.client.post(request_path, {
+    #         "name": "umami",
+    #         "pass": "umami",
+    #         "form_id": "user_login_form",
+    #         "form_build_id": get_form_build_id(self, request_path),
+    #         "op": "Log in"
+    #     })
     
-    def on_start(self):
-        self.login() # on_start is called when a Locust start before, any task is scheduled
+    # def on_start(self):
+    #     self.login() # on_start is called when a Locust start before, any task is scheduled
 
-    def on_stop(self):
-        self.client.get("/user/logout")
+    # def on_stop(self):
+    #     self.client.get("/user/logout")
 
-    ## Adv.6.0 Recorded Selenium Steps, Selenium Recorder and export to pytest
+    # ## Adv.6.0 Recorded Selenium Steps, Selenium Recorder and export to pytest
+    # # @task(1)
+    # # def pytest(self):
+    # #      start_time = time.time()
+    # #      os.system("pytest locustfile.py")
+    # #      total_time = int((time.time() - start_time) * 1000)
+    # #      events.request_success.fire(
+    # #          request_type="pytest",
+    # #          name="update-recipe-item",
+    # #          response_time=total_time,
+    # #          response_length=0
+    # #      )
+
+    # ## CasperJS - Use Katalaon Recorder
+    # # @task(1)
+    # # def casperjs(self):
+    # #     start_time = time.time()
+    # #     # Python file example
+    # #     # os.system("python casperjs/casperjs.py")
+    # #     # CasperJS file example
+    # #     os.system("casperjs test casper.js")
+    # #     total_time = int((time.time() - start_time) * 1000)
+    # #     events.request_success.fire(
+    # #         request_type="casperjs",
+    # #         name="purchase_physical_prod",
+    # #         response_time=total_time,
+    # #         response_length=0
+    # #     )
+
+    # ## Selenium - Use Selenium IDE Recorder 
     # @task(1)
-    # def pytest(self):
-    #      start_time = time.time()
-    #      os.system("pytest locustfile.py")
-    #      total_time = int((time.time() - start_time) * 1000)
-    #      events.request_success.fire(
-    #          request_type="pytest",
-    #          name="update-recipe-item",
-    #          response_time=total_time,
-    #          response_length=0
-    #      )
-
-    ## CasperJS - Use Katalaon Recorder
-    # @task(1)
-    # def casperjs(self):
+    # def selenium(self):
     #     start_time = time.time()
-    #     # Python file example
-    #     # os.system("python casperjs/casperjs.py")
-    #     # CasperJS file example
-    #     os.system("casperjs test casper.js")
+    #     os.system('selenium-side-runner -c "goog:chromeOptions.args=[--headless,--nogpu] browserName=chrome" locustfile.side')
     #     total_time = int((time.time() - start_time) * 1000)
     #     events.request_success.fire(
-    #         request_type="casperjs",
-    #         name="purchase_physical_prod",
+    #         request_type="selenium",
+    #         name="login-search",
     #         response_time=total_time,
     #         response_length=0
     #     )
-
-    ## Selenium - Use Selenium IDE Recorder 
-    @task(1)
-    def selenium(self):
-        start_time = time.time()
-        os.system('selenium-side-runner -c "goog:chromeOptions.args=[--headless,--nogpu] browserName=chrome" locustfile.side')
-        total_time = int((time.time() - start_time) * 1000)
-        events.request_success.fire(
-            request_type="selenium",
-            name="login-search",
-            response_time=total_time,
-            response_length=0
-        )
-
-## Adv.U Advanced User Setting
-class AdvancedUser(HttpLocust):
-    host = os.getenv('TARGET_URL', "https://dev-ps-loadtest-dummy.pantheonsite.io")
-    task_set = AdvancedTaskSet
-    wait_time = between(1, 60)
-
